@@ -23,4 +23,4 @@ https://tech--blog.herokuapp.com/
 Rawan Fatima
 
 ##  5. Questions
-If you have any questions, contact me at fatimarawan15@gmail.com or refer to my github repository: https://github.com/waveess/progressive-web-app
+If you have any questions, contact me at fatimarawan15@gmail.com or refer to my github repository: https://github.com/waveess/blog/blob/master/README.md
