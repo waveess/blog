@@ -9,7 +9,8 @@
  
 
 ## 1. Usage
- This application allows users to track their budget and provides offline access and functionality where they will be able to add expenses and deposits to their budget with or without an internet connection.
+ This application allows users to sign up if they are not a member, then once they are logged in they are able to view their dashboard of posts, view, add, edit, and delete blog posts and are able to comment on other developers' posts as well.
+
 
 ##  2. License
 
