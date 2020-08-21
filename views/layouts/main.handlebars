@@ -4,30 +4,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Tech Blog</title>
+  <title>Tech Blog</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
 </head>
 
 <body>
   <div class="wrapper">
-    <header>
-      <h1>
-        <p class="blog-title">The Tech Blog <i class="large material-icons">laptop_mac</i></p>
-      </h1>
-    
-    <nav>
-    {{#if loggedIn}}
-    <a href="/" class="homepage">Homepage</a>
-    <a href="/dashboard">Dashboard</a>
-    <button id="logout" class="btn-no-style">Logout</button>
-    {{else}}
-    <a href="/" class="homepage">Homepage</a>
-    <a href="/login">Login</a>
-    {{/if}}
-    </nav>
-    </header>
+      <header class="hero">
+          <div>
+            <nav class"nav">
+                    <a class="link" href="/">home</a>
+                    <a class="link" href="/dashboard">dashboard</a>
+                    {{#if loggedIn}}
+                    <a class="link" href="/" id="logout">logout</a>
+                    {{else}}
+                    <a class="link" href="/login">login</a>
+                    {{/if}}
+                </nav>          
+          </div>
+
+          <h1 class="app-title"><i class="fab "></i>Tech Blog</h1>
+      </header>
+
     <main>
       {{{ body }}}
     </main>

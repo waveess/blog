@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
-const withAuth = require('../../utils/auth');
 
 // GET /api/users
-router.get('/',  (req, res) => {
+router.get('/', (req, res) => {
     // access our user model and run .findAll() method -- similar to SELECT * FROM users;
     User.findAll({
         attributes: { exclude: ['[password']}
@@ -15,7 +14,9 @@ router.get('/',  (req, res) => {
     });
 });
 
-// GET a single user by id 
+
+
+// GET /api/users/1
 router.get('/:id', (req, res) => {
     User.findOne({
         attributes: { exclude: ['password'] },
@@ -25,7 +26,11 @@ router.get('/:id', (req, res) => {
         include: [
           {
             model: Post,
-            attributes: ['id', 'title', 'post_text', 'created_at']
+            attributes: [
+                'id', 
+                'title', 
+                'content', 
+                'created_at']
           },
           // include the Comment model here:
           {
@@ -35,27 +40,31 @@ router.get('/:id', (req, res) => {
               model: Post,
               attributes: ['title']
             }
+          },
+          {
+            model: Post,
+            attributes: ['title'],
           }
         ]
       })
-        .then(dbUserData => {
-            if (!dbUserData) {
-                res.status(404).json({ message: 'No user found with this id'});
-                return;
-            }
-            res.json(dbUserData);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+      .then(dbUserData => {
+        if (!dbUserData) {
+          res.status(404).json({ message: 'No user found with this id' });
+          return;
+        }
+        res.json(dbUserData);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
 });
 
-// CREATE new user 
+// POST /api/users - similar to INSERT INTO users / VALUES 
 router.post('/', (req, res) => {
+    // expects {username: 'Lernantino', password: 'password1234'}
     User.create({
         username: req.body.username,
-        email: req.body.email,
         password: req.body.password
     })
     // store user data during session 
@@ -67,19 +76,24 @@ router.post('/', (req, res) => {
 
         res.json(dbUserData);
         });
-    });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
 });
 
-// LOG IN for users/ verify users 
+
+// POST to identify users 
 router.post('/login', (req, res) => {
-    // expects {email: 'lernantino@gmail.com', password: 'password1234'}
+    // expects {username: 'lernantino', password: 'password1234'}
     User.findOne({
         where: {
-            email: req.body.email
+            username: req.body.username
         }
     }).then(dbUserData => {
         if (!dbUserData) {
-            res.status(400).json({ message: 'No user with that email address!'});
+            res.status(400).json({ message: 'No user with that username!'});
             return;
         }
         // res.json({ user: dbUserData});
@@ -98,11 +112,16 @@ router.post('/login', (req, res) => {
       
             res.json({ user: dbUserData, message: 'You are now logged in!' });
         });
-    });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
 });
 
-// LOG OUT 
-router.post('/logout', withAuth, (req, res) => {
+
+// users to log out 
+router.post('/logout', (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
             res.status(204).end();
@@ -112,8 +131,10 @@ router.post('/logout', withAuth, (req, res) => {
     }
 });
 
-// UPDATE a user 
-router.put('/:id', withAuth, (req, res) => {
+// PUT /api/users/1 - similar to UPDATE 
+router.put('/:id', (req, res) => {
+    // if req.body has exact key/value pairs to match the model, you can just use `req.body` instead
+
     User.update(req.body, {
         individualHooks: true,
         where: {
@@ -131,10 +152,11 @@ router.put('/:id', withAuth, (req, res) => {
         console.log(err); 
         res.status(500).json(err);
     });
+
 });
 
-// DELETE a user
-router.delete('/:id', withAuth, (req, res) => {
+// DELETE /api/users/1
+router.delete('/:id', (req, res) => {
     User.destroy({
         where: {
             id: req.params.id
@@ -152,5 +174,8 @@ router.delete('/:id', withAuth, (req, res) => {
             res.status(500).json(err);
         });
 });
+
+
+
 
 module.exports = router;

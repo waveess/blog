@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { Post, User, Comment } = require('../models');
-const withAuth = require('../utils/auth');
 const sequelize = require('../config/connection');
+const {Post, User, Comment} = require('../models');
+const withAuth = require('../utils/auth');
 
-// dashboard displaying posts created by logged in users 
+
 router.get('/', withAuth, (req, res) => {
     Post.findAll({
       where: {
@@ -12,8 +12,8 @@ router.get('/', withAuth, (req, res) => {
       },
       attributes: [
         'id',
-        'post_text',
         'title',
+        'content',
         'created_at'
       ],
       include: [
@@ -42,45 +42,53 @@ router.get('/', withAuth, (req, res) => {
       });
   });
 
-// rendering edit page
+
 router.get('/edit/:id', withAuth, (req, res) => {
     Post.findOne({
-    where: {
-    id: req.params.id
-    },
-    attributes: ['id', 
-                'post_text', 
-                'title',
-                'created_at'
-            ],
-    include: [
-    {
-        model: User,
-        attributes: ['username']
-    },
-    {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-        model: User,
-        attributes: ['username']
-        }
-    }
-    ]
+        where: {
+          id: req.params.id
+        },
+        attributes: ['id', 
+                     'title',
+                     'content',
+                     'created_at'
+                  ],
+        include: [
+          {
+            model: User,
+            attributes: ['username']
+          },
+          {
+            model: Comment,
+            attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+            include: {
+              model: User,
+              attributes: ['username']
+            }
+          }
+        ]
+      })
+        .then(dbPostData => {
+          if (!dbPostData) {
+            res.status(404).json({ message: 'No post found with this id' });
+            return;
+          }
+            // serialize data before passing to template
+            const post = dbPostData.get({ plain: true });
+            res.render('edit-post', {post, loggedIn: true});
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json(err);
+        });
 })
-    .then(dbPostData => {
-    const post = dbPostData.get({ plain: true });
-    res.render('edit-posts', { post , loggedIn: true }); 
-    })
-    .catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-    });
+
+
+// redirecting users to sign in page once they sign up
+router.get('/new', (req, res) => {
+    res.render('new-post');
 });
 
-// rendering newpost page 
-router.get('/newpost', (req, res) => {
-  res.render('new-posts');
-});
+
 
 module.exports = router;

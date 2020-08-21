@@ -1,38 +1,35 @@
 const router = require('express').Router();
 const { Post, User, Comment} = require('../../models');
-const withAuth = require('../../utils/auth');
 const sequelize = require('../../config/connection');
+const withAuth = require('../../utils/auth');
 
 // GET all posts
 router.get('/', (req, res) => {
     console.log('======================');
     Post.findAll({
       // Query configuration
-      attributes: ['id', 
-                   'post_text',
-                   'title',
-                   'created_at'
-                ],
-      // show latest news first
-      order: [['created_at', 'DESC']],
-      // JOIN to the User table
-      include: [
-          // comment model -- attaches username to comment 
-          {
+        attributes: ['id', 
+                    'title',
+                    'content',
+                    'created_at'
+                    ],
+        order: [['created_at', 'DESC']],          
+        include: [
+            {
+            model: User,
+            attributes: ['username']
+            },
+            {
             model: Comment,
             attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
             include: {
-              model: User,
-              attributes: ['username']
+                model: User,
+                attributes: ['username']
             }
-          },
-          {
-            model: User,
-            attributes: ['username']
-          },
-      ]
-    }) 
-        .then(dbPostData => res.json(dbPostData))
+            }
+        ]
+    })
+        .then(dbPostData => res.json(dbPostData.reverse()))
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
@@ -40,14 +37,14 @@ router.get('/', (req, res) => {
   
 });
 
-// GET a single post by id 
+// GET a single post 
 router.get('/:id', (req, res) => {
     Post.findOne({
       where: {
         id: req.params.id
       },
       attributes: ['id', 
-                   'post_text', 
+                   'content',
                    'title',
                    'created_at'
                 ],
@@ -79,11 +76,12 @@ router.get('/:id', (req, res) => {
       });
   });
 
-// CREATE a new post
+// creating a post
 router.post('/', withAuth, (req, res) => {
+    // create 1 post
     Post.create({ 
         title: req.body.title,
-        post_text: req.body.post_text,
+        content: req.body.content,
         user_id: req.session.user_id
     })
         .then(dbPostData => res.json(dbPostData))
@@ -93,11 +91,13 @@ router.post('/', withAuth, (req, res) => {
         });
 });
 
-// UPDATE a post
+
+
+// update a post title
 router.put('/:id', withAuth, (req, res) => {
     Post.update({
         title: req.body.title,
-        post_text: req.body.post_text
+        content: req.body.content
       },
       {
         where: {
@@ -116,7 +116,9 @@ router.put('/:id', withAuth, (req, res) => {
     });
 });
 
-// DELETE A post 
+
+
+// delete a post 
 router.delete('/:id', withAuth, (req, res) => {
     Post.destroy({
         where: {

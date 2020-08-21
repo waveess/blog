@@ -1,3 +1,4 @@
+// module.exports = Post;
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
@@ -15,17 +16,11 @@ Post.init(
       },
       title: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          len:[1]
-      }
+        allowNull: false
       },
-      post_text: {
+      content: {
         type: DataTypes.TEXT,
-        allowNull: false,
-        validate: {
-          len:[1]
-      }
+        allowNull: false
       },
       user_id: {
         type: DataTypes.INTEGER,
@@ -42,5 +37,5 @@ Post.init(
       modelName: 'post'
     }
   );
-
+  
   module.exports = Post;
