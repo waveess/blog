@@ -20,6 +20,14 @@ This project is licensed under MIT.
 
 https://tech--blog.herokuapp.com/
 
+<img width="1440" alt="Screen Shot 2020-08-21 at 1 51 21 PM" src="https://user-images.githubusercontent.com/61710672/90934082-8baa4900-e3b5-11ea-9b0f-92078bf98f4c.png">
+<img width="1440" alt="Screen Shot 2020-08-21 at 1 51 25 PM" src="https://user-images.githubusercontent.com/61710672/90934095-906efd00-e3b5-11ea-9bd6-66be6dad2c61.png">
+<img width="1440" alt="Screen Shot 2020-08-21 at 1 51 29 PM" src="https://user-images.githubusercontent.com/61710672/90934104-95cc4780-e3b5-11ea-9908-8edfe1622251.png">
+<img width="1440" alt="Screen Shot 2020-08-21 at 1 51 34 PM" src="https://user-images.githubusercontent.com/61710672/90934113-99f86500-e3b5-11ea-8a3a-d25ed6d66e29.png">
+<img width="1440" alt="Screen Shot 2020-08-21 at 1 51 42 PM" src="https://user-images.githubusercontent.com/61710672/90934128-9f55af80-e3b5-11ea-8808-9b9f0c9fa3f5.png">
+<img width="1440" alt="Screen Shot 2020-08-21 at 1 51 51 PM" src="https://user-images.githubusercontent.com/61710672/90934135-a086dc80-e3b5-11ea-9680-e15521a265f9.png">
+
+
 ## 4. Contributing
 Rawan Fatima
 
